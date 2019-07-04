@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace RotaryHeart.Lib
 {
-    [CreateAssetMenu(fileName = "DataBase.asset", menuName = "Data Base")]
+    //[CreateAssetMenu(fileName = "DataBase.asset", menuName = "Data Base")]
     public class DataBaseExample : ScriptableObject
     {
         public enum EnumExample
@@ -49,16 +49,16 @@ namespace RotaryHeart.Lib
 
             public bool Equals(AdvancedGenericClass other)
             {
-                if (ReferenceEquals(null, other)) return false;
-                if (ReferenceEquals(this, other)) return true;
+                if(ReferenceEquals(null, other)) return false;
+                if(ReferenceEquals(this, other)) return true;
                 return other.value == value;
             }
 
             public override bool Equals(object obj)
             {
-                if (ReferenceEquals(null, obj)) return false;
-                if (ReferenceEquals(this, obj)) return true;
-                if (obj.GetType() != typeof(AdvancedGenericClass)) return false;
+                if(ReferenceEquals(null, obj)) return false;
+                if(ReferenceEquals(this, obj)) return true;
+                if(obj.GetType() != typeof(AdvancedGenericClass)) return false;
                 return Equals((AdvancedGenericClass)obj);
             }
 
