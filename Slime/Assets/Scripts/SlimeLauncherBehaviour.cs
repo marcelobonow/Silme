@@ -54,9 +54,9 @@ public class SlimeLauncherBehaviour : MonoBehaviour
 
     private void UpdateGizmosPosition()
     {
-        var force = Vector2.Distance(Input.mousePosition, initialClickPosition)/50f;
-        var angle = Mathf.Atan2(Input.mousePosition.x - initialClickPosition.x, Input.mousePosition.y-initialClickPosition.y) * Mathf.Deg2Rad;
-        //var angle = Vector2.SignedAngle(Input.mousePosition, initialClickPosition) * Mathf.Deg2Rad;
+        var force = Vector2.Distance(Input.mousePosition, initialClickPosition)/50f;]
+        ///TODO, identificar se esta no segundo ou terceiro qudrante
+        var angle = Vector2.Angle(Vector2.left, (Vector2)Input.mousePosition - initialClickPosition) * Mathf.Deg2Rad;
         Debug.Log("Angulo: " + angle * Mathf.Rad2Deg + " graus");
         for(var i = 0; i < gizmosPreviewQuantity; i++)
         {
