@@ -12,6 +12,12 @@ public class SlimeBehaviour : MonoBehaviour
     private bool isAttached;
     private float oldGravity;
 
+    private void FixedUpdate()
+    {
+        if(isAttached)
+            rigidbody2d.velocity = new Vector2(rigidbody2d.velocity.x, Mathf.Clamp(rigidbody2d.velocity.y, -maxFallSpeed, Mathf.Infinity));
+    }
+
     public void OnTriggerEnter2D(Collider2D collision)
     {
         Assert.IsNotNull(rigidbody2d);
@@ -20,9 +26,15 @@ public class SlimeBehaviour : MonoBehaviour
             isAttached = true;
             oldGravity = rigidbody2d.gravityScale;
             rigidbody2d.gravityScale = OnWallFallAccelaration;
+            rigidbody2d.constraints = RigidbodyConstraints2D.FreezePositionX;
+            rigidbody2d.velocity = Vector2.zero;
         }
     }
-
-    private void FixedUpdate() =>
-        rigidbody2d.velocity = new Vector2(rigidbody2d.velocity.x, Mathf.Clamp(rigidbody2d.velocity.y, -maxFallSpeed, Mathf.Infinity));
+    public void LaunchSlime(Vector2 velocity)
+    {
+        rigidbody2d.velocity = velocity;
+        rigidbody2d.constraints = RigidbodyConstraints2D.None;
+        rigidbody2d.gravityScale = oldGravity;
+        isAttached = false;
+    }
 }
