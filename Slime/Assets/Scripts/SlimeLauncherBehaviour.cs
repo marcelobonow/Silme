@@ -88,7 +88,7 @@ public class SlimeLauncherBehaviour : MonoBehaviour
     {
         //x = x0 + vo.t
         var x = basePosition.transform.position.x + force * Mathf.Cos(angle) * time;
-        //y = y0 + v0.sen(o)t.gt^2 / 2
+        //y = y0 + v0.sen(o)t + gt^2 / 2
         var y = basePosition.transform.position.y + force * Mathf.Sin(angle) * time + Physics2D.gravity.y * time * time/2;
         return new Vector2(x, y);
     }
