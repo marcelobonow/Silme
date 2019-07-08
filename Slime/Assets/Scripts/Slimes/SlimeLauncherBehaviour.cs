@@ -41,8 +41,6 @@ public class SlimeLauncherBehaviour : MonoBehaviour
         }
     }
 
-
-
     public void OnPointerDown()
     {
         if(slimeBehaviour.isAttached)
@@ -53,13 +51,12 @@ public class SlimeLauncherBehaviour : MonoBehaviour
     }
     public void OnPointerUp()
     {
-        if(slimeBehaviour.isAttached)
-        {
-            currentLaunchState = LaunchState.NotClicked;
-            UpdateGizmoState();
-            var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            slimeBehaviour.LaunchSlime(force * ((Vector2)mousePosition - (Vector2)slimeBehaviour.transform.position).normalized);
-        }
+        var mousePosition = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        if(CanLaunch(slimeBehaviour.currentWall, mousePosition))
+            slimeBehaviour.LaunchSlime(force * (mousePosition - (Vector2)slimeBehaviour.transform.position).normalized);
+
+        currentLaunchState = LaunchState.NotClicked;
+        UpdateGizmoState();
     }
 
     private void Update()
@@ -94,4 +91,10 @@ public class SlimeLauncherBehaviour : MonoBehaviour
         var y = basePosition.transform.position.y + force * Mathf.Sin(angle) * time + Physics2D.gravity.y * time * time/2;
         return new Vector2(x, y);
     }
+    private bool CanLaunch(Walls currentWall, Vector2 mousePosition)
+        => currentWall == Walls.left ? GetAngle(Vector2.up, mousePosition) > 0 : GetAngle(Vector2.down, mousePosition) > 0
+            && slimeBehaviour.isActiveAndEnabled;
+
+    private float GetAngle(Vector2 direction, Vector2 mousePosition)
+        => Vector2.SignedAngle(direction, (Vector2)slimeBehaviour.transform.position - mousePosition);
 }

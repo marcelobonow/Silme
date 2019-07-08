@@ -10,6 +10,7 @@ public class SlimeBehaviour : MonoBehaviour
     [SerializeField] private float maxFallSpeed;
 
     public bool isAttached { private set; get; }
+    public Walls currentWall { private set; get; }
     private float oldGravity;
 
     private void FixedUpdate()
@@ -23,6 +24,7 @@ public class SlimeBehaviour : MonoBehaviour
         Assert.IsNotNull(rigidbody2d);
         if(collision.CompareTag("Wall"))
         {
+            currentWall = collision.GetComponent<WallData>().wall;
             isAttached = true;
             oldGravity = rigidbody2d.gravityScale;
             rigidbody2d.gravityScale = OnWallFallAccelaration;
