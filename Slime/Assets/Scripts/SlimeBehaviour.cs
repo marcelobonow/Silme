@@ -9,7 +9,7 @@ public class SlimeBehaviour : MonoBehaviour
     [SerializeField] private float OnWallFallAccelaration;
     [SerializeField] private float maxFallSpeed;
 
-    private bool isAttached;
+    public bool isAttached { private set; get; }
     private float oldGravity;
 
     private void FixedUpdate()

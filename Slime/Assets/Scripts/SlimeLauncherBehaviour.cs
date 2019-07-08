@@ -16,13 +16,13 @@ public enum LaunchState
 
 public class SlimeLauncherBehaviour : MonoBehaviour
 {
-    private const int gizmosPreviewQuantity = 4;
-
+    [SerializeField] private float gizmosDistance = 0.25f;
     [SerializeField] private SlimeBehaviour slimeBehaviour;
     [SerializeField] private Transform basePosition;
     [SerializeField] private Transform GizmosParent;
     [SerializeField] private GameObject previewGizmoPrefab;
     [SerializeField] private float baseForce;
+    private const int gizmosPreviewQuantity = 4;
 
     private LaunchState currentLaunchState;
     private Vector2 initialClickPosition;
@@ -45,7 +45,7 @@ public class SlimeLauncherBehaviour : MonoBehaviour
 
     public void OnPointerDown()
     {
-        if(currentLaunchState == LaunchState.NotClicked)
+        if(slimeBehaviour.isAttached)
         {
             currentLaunchState = LaunchState.Holding;
             initialClickPosition = Input.mousePosition;
@@ -54,9 +54,12 @@ public class SlimeLauncherBehaviour : MonoBehaviour
     }
     public void OnPointerUp()
     {
-        currentLaunchState = LaunchState.NotClicked;
-        UpdateGizmoState();
-        slimeBehaviour.LaunchSlime(GetForce() * (initialClickPosition - (Vector2)Input.mousePosition).normalized);
+        if(slimeBehaviour.isAttached)
+        {
+            currentLaunchState = LaunchState.NotClicked;
+            UpdateGizmoState();
+            slimeBehaviour.LaunchSlime(GetForce() * (initialClickPosition - (Vector2)Input.mousePosition).normalized);
+        }
     }
 
     private void Update()
@@ -74,7 +77,7 @@ public class SlimeLauncherBehaviour : MonoBehaviour
             for(var i = 0; i < gizmosPreviewQuantity; i++)
             {
                 var gizmo = previewGizmos[i];
-                gizmo.transform.position = GetGizmoPosition(force, angle, (i+1) * 0.25f);
+                gizmo.transform.position = GetGizmoPosition(force, angle, (i+1) * gizmosDistance * 1/force);
             }
         }
     }
