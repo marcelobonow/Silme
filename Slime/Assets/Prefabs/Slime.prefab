@@ -148,13 +148,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f9d90ba817a6b7b4693cd3acbe813d51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gizmosDistance: 1.5
+  gizmosDistance: 1
   slimeBehaviour: {fileID: 1962468127924255396}
   basePosition: {fileID: 1962468127924255392}
   GizmosParent: {fileID: 4640507329953645814}
   previewGizmoPrefab: {fileID: 5860572440983185963, guid: 2a7b98e48cc338b4abaaadec734f076f,
     type: 3}
-  baseForce: 1
+  force: 25
 --- !u!1 &8342108765142538186
 GameObject:
   m_ObjectHideFlags: 0

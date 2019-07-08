@@ -21,11 +21,10 @@ public class SlimeLauncherBehaviour : MonoBehaviour
     [SerializeField] private Transform basePosition;
     [SerializeField] private Transform GizmosParent;
     [SerializeField] private GameObject previewGizmoPrefab;
-    [SerializeField] private float baseForce;
+    [SerializeField] private float force;
     private const int gizmosPreviewQuantity = 4;
 
     private LaunchState currentLaunchState;
-    private Vector2 initialClickPosition;
     private List<GameObject> previewGizmos;
 
     private void Awake()
@@ -33,7 +32,6 @@ public class SlimeLauncherBehaviour : MonoBehaviour
         Assert.IsNotNull(slimeBehaviour);
         Assert.IsNotNull(basePosition);
         Assert.IsNotNull(previewGizmoPrefab);
-        initialClickPosition = Vector2.zero;
         previewGizmos = new List<GameObject>();
         for(var i = 0; i < gizmosPreviewQuantity; i++)
         {
@@ -43,12 +41,13 @@ public class SlimeLauncherBehaviour : MonoBehaviour
         }
     }
 
+
+
     public void OnPointerDown()
     {
         if(slimeBehaviour.isAttached)
         {
             currentLaunchState = LaunchState.Holding;
-            initialClickPosition = Input.mousePosition;
             UpdateGizmoState();
         }
     }
@@ -58,7 +57,8 @@ public class SlimeLauncherBehaviour : MonoBehaviour
         {
             currentLaunchState = LaunchState.NotClicked;
             UpdateGizmoState();
-            slimeBehaviour.LaunchSlime(GetForce() * (initialClickPosition - (Vector2)Input.mousePosition).normalized);
+            var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            slimeBehaviour.LaunchSlime(force * ((Vector2)mousePosition - (Vector2)slimeBehaviour.transform.position).normalized);
         }
     }
 
@@ -71,8 +71,8 @@ public class SlimeLauncherBehaviour : MonoBehaviour
     {
         if(currentLaunchState == LaunchState.Holding)
         {
-            var force = GetForce();
-            var angle = Vector2.SignedAngle(Vector2.left, (Vector2)Input.mousePosition - initialClickPosition) * Mathf.Deg2Rad;
+            var mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            var angle = Vector2.SignedAngle(Vector2.left, (Vector2)slimeBehaviour.transform.position - (Vector2)mousePosition) * Mathf.Deg2Rad;
             Assert.IsTrue(angle < Mathf.PI * 2);
             for(var i = 0; i < gizmosPreviewQuantity; i++)
             {
@@ -86,7 +86,6 @@ public class SlimeLauncherBehaviour : MonoBehaviour
         foreach(var gizmo in previewGizmos)
             gizmo.SetActive(currentLaunchState == LaunchState.Holding);
     }
-    private float GetForce() => baseForce + Vector2.Distance(Input.mousePosition, initialClickPosition)/50f;
     private Vector2 GetGizmoPosition(float force, float angle, float time)
     {
         //x = x0 + vo.t
