@@ -19,12 +19,12 @@ public class SlimeBehaviour : MonoBehaviour
             rigidbody2d.velocity = new Vector2(rigidbody2d.velocity.x, Mathf.Clamp(rigidbody2d.velocity.y, -maxFallSpeed, Mathf.Infinity));
     }
 
-    public void OnTriggerEnter2D(Collider2D collision)
+    public void OnCollisionEnter2D(Collision2D collision)
     {
         Assert.IsNotNull(rigidbody2d);
-        if(collision.CompareTag("Wall"))
+        if(collision.collider.CompareTag("Wall"))
         {
-            currentWall = collision.GetComponent<WallData>().wall;
+            currentWall = collision.collider.GetComponent<WallData>().wall;
             isAttached = true;
             oldGravity = rigidbody2d.gravityScale;
             rigidbody2d.gravityScale = OnWallFallAccelaration;
